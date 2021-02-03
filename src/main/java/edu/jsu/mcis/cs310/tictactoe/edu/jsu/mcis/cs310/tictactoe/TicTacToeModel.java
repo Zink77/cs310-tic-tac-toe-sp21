@@ -3,7 +3,7 @@ package edu.jsu.mcis.cs310.tictactoe;
 /**
 * TicTacToeModel implements the Model for the Tic-Tac-Toe game.
 *
-* @author  Your Name
+* @author  Jordan Johnson
 * @version 1.0
 */
 public class TicTacToeModel {
@@ -53,6 +53,12 @@ public class TicTacToeModel {
         /* Initialize board (fill with TicTacToeSquare.EMPTY) */
         
         // INSERT YOUR CODE HERE
+
+        for (int i = 0; i < dimension; i++)
+        {
+            board[i][i] = TicTacToeSquare.EMPTY;
+
+        }
         
     }
     /**
@@ -72,8 +78,20 @@ public class TicTacToeModel {
     public boolean makeMark(int row, int col) {
         
         // INSERT YOUR CODE HERE
+
+        boolean isTheSquareOnTheBoard;
+        boolean isTheSquareAlreadyMarked;
+        boolean canIMark = false;
+
+        isTheSquareAlreadyMarked = isSquareMarked(row,col);
+        isTheSquareOnTheBoard = isValidSquare(row,col);
+
+        if ((!isTheSquareAlreadyMarked) && (isTheSquareOnTheBoard))
+                {
+                    canIMark = true;
+                }
         
-        return false; // this is a stub; you may need to remove it later!
+        return canIMark; // this is a stub; you may need to remove it later!
         
     }
     
@@ -89,8 +107,17 @@ public class TicTacToeModel {
     private boolean isValidSquare(int row, int col) {
         
         // INSERT YOUR CODE HERE
+        boolean squareOnBoard = false;
+
+        if ((row >= 0) && (row <= dimension))
+        {
+            if ((col >= 0) && (col <= dimension))
+            {
+                squareOnBoard = true;
+            }
+        }
         
-        return false; // this is a stub; you may need to remove it later!
+        return squareOnBoard; // this is a stub; you may need to remove it later!
         
     }
     
@@ -105,8 +132,15 @@ public class TicTacToeModel {
     private boolean isSquareMarked(int row, int col) {
                 
         // INSERT YOUR CODE HERE
+
+        boolean marked = true;
+
+        if (getSquare(row,col) == TicTacToeSquare.EMPTY )
+        {
+            marked = false;
+        }
         
-        return false; // this is a stub; you may need to remove it later!
+        return marked; // this is a stub; you may need to remove it later!
             
     }
     
@@ -122,8 +156,21 @@ public class TicTacToeModel {
     public TicTacToeSquare getSquare(int row, int col) {
         
         // INSERT YOUR CODE HERE
-        
-        return null; // this is a stub; you should remove it later!
+
+        TicTacToeSquare thisSquare = TicTacToeSquare.EMPTY;
+
+        if (board[row] [col] == TicTacToeSquare.X)
+        {
+            thisSquare = TicTacToeSquare.X;
+        }
+        else if (board[row] [col] == TicTacToeSquare.O)
+        {
+            thisSquare = TicTacToeSquare.O;
+        }
+
+
+
+        return thisSquare; // this is a stub; you should remove it later!
             
     }
     
@@ -138,8 +185,19 @@ public class TicTacToeModel {
     public TicTacToeState getState() {
         
         // INSERT YOUR CODE HERE
+        TicTacToeState thisState = TicTacToeState.TIE;
+
+        if (isMarkWin(TicTacToeSquare.X))
+        {
+            thisState = TicTacToeState.X;
+        }
+
+        else if (isMarkWin(TicTacToeSquare.O))
+        {
+            thisState = TicTacToeState.O;
+        }
         
-        return null; // this is a stub; you should remove it later!
+        return thisState; // this is a stub; you should remove it later!
         
     }
     
@@ -154,6 +212,9 @@ public class TicTacToeModel {
     private boolean isMarkWin(TicTacToeSquare mark) {
         
         // INSERT YOUR CODE HERE
+        boolean isWin = false;
+
+
         
         return false; // this is a stub; you may need to remove it later!
         
