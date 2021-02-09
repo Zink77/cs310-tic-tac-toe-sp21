@@ -5,7 +5,7 @@ package edu.jsu.mcis.cs310.tictactoe;
 * game board, or the specified player's mark.
 *
 * @author  Jordan Johnson
-* @version 1.0
+* @version 2.0
 */
 public enum TicTacToeSquare {
     

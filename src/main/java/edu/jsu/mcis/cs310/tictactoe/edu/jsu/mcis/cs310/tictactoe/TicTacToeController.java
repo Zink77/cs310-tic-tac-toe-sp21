@@ -1,12 +1,27 @@
 package edu.jsu.mcis.cs310.tictactoe;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
 * TicTacToeController implements the Controller for the Tic-Tac-Toe game.
+* 
+* @author  Jay Snellen, III
+* @version 2.0
+* 
+* (Instead of the Controller implementing the flow of execution in a main loop,
+* as in the console version of this game, the GUI version leaves all interaction
+* with the user to the View.  The Controller implements the
+* {@link ActionListener} interface, so that when the user interacts with the GUI
+* (by clicking a button, for example), these events can be handled by the
+* Controller, in much the same way that the Controller handled user input
+* returned from the View in the console version of this game.
+* 
+* @see ActionListener
 *
-* @author  Jordan Johnson
-* @version 1.0
 */
-public class TicTacToeController {
+public class TicTacToeController implements ActionListener {
 
     private final TicTacToeModel model;
     private final TicTacToeView view;
@@ -20,65 +35,84 @@ public class TicTacToeController {
     public TicTacToeController(int dimension) {
 
         model = new TicTacToeModel(dimension);
-        view = new TicTacToeView();
+        view = new TicTacToeView(this, dimension);
         
     }
     
     /**
-    * <p>Implements the main game loop, which repeats until the game is over.
-    * This method should use {@link TicTacToeModel#isGameover()} to check if
-    * the game is over; as long as the game is <em>not over</em>, the main loop should:</p>
-    * <ol>
-    * <li>Display the board using the {@link TicTacToeView#showBoard(java.lang.String)} method,</li>
-    * <li>Get the next move from player using the {@link TicTacToeView#getNextMove(boolean)} method,</li>
-    * <li>Attempt to make the player's mark using the {@link TicTacToeModel#makeMark(int, int)} method.</li>
-    * </ol>
-    * <p>If the attempt failed, the {@link TicTacToeView#showInputError()} method
-    * should be called to display an error message.  The player should then be
-    * prompted to enter another move until the attempt is successful.</p>
-    * <p>After the game is over, use the {@link TicTacToeView#showBoard(java.lang.String)} method
-    * to show the final state of the game board, and the {@link TicTacToeView#showResult(java.lang.String)} method
-    * to show the final result: either X or O wins, or a tie condition.</p>
+    * A "pass-through" method to allow the main class to start the GUI.
     */
-
     public void start() {
     
-        /* MAIN LOOP (repeats until game is over) */  
+        view.start();
+        
+    }
+    
+    /**
+    * This method gets the content of the indicated square from the Model and
+    * returns it to the caller as a String.  This is a "pass-through" method
+    * provided for the View; it allows the state of the Model to be passed to
+    * the View so it can be displayed in the GUI, while leaving the Model and
+    * View completely separated from one another.
+    * 
+    * @param row  the row (Y coordinate) of the square.
+    * @param col  the column (X coordinate) of the square.
+    * @return     a String representing the content of the indicated square
+    */
+    public String getSquareAsString(int row, int col) {
+        
+        return (model.getSquare(row, col).toString());
+        
+    }
+    
+    /**
+    * This is the event handler for the View.  When the user interacts with the
+    * View (by clicking a button, for example), the event is handled by this
+    * method, which implements the ActionListener interface.
+    * 
+    * @param event  a reference to the GUI component which initiated the event
+    */    
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        
+        /* Get GUI Component Name */
+        
+        String name = ((Component) event.getSource()).getName();
+        
+        /* Parse Row and Column from Name (assumes "SquareYX" format!) */
 
-        // INSERT YOUR CODE HERE
+        int row = Integer.parseInt(name.substring(6, 7));
+        int col = Integer.parseInt(name.substring(7, 8));
+        
+        /* Add Mark to Model */
 
+        model.makeMark(row,col);
+        
+        /* Update the View */
 
-        while (model.isGameover() == false)
-        {
-            view.showBoard(model.toString());
-            TicTacToeMove move = view.getNextMove(model.isXTurn());
-            boolean validityOfSquare = model.makeMark(move.getRow(), move.getCol());
-            model.getState();
+        view.updateSquares();
+        
+        /* Get Game State */
+        
+        TicTacToeState state = model.getState();
+        
+        /* If Game Over, Disable Squares and Show Result in Result Label */
 
+        if (state != TicTacToeState.NONE) {
 
-            if (validityOfSquare == false)
-            {
-                do
-                    {
-                        view.showInputError();
-                        System.out.println("Please enter another coordinate: ");
-                        view.showBoard(model.toString());
-                        move = view.getNextMove(model.isXTurn());
-                        validityOfSquare = model.makeMark(move.getRow(), move.getCol());
-                        model.getState();
-                    }
-                while (!validityOfSquare);
-
-            }
-
+            view.disableSquares();
+            view.showResult(state.toString());
+            
         }
         
-        /* Display Results and Exit */
-
-        view.showBoard(model.toString());
-
-        view.showResult(model.getState().toString());
+        /* Else, Clear Result Label */
         
+        else {
+            
+            view.clearResult();
+            
+        }
+
     }
 
 }
