@@ -48,13 +48,15 @@ public class TicTacToeController {
         // INSERT YOUR CODE HERE
 
 
-        while (!model.isGameover())
+        while (model.isGameover() == false)
         {
             view.showBoard(model.toString());
             TicTacToeMove move = view.getNextMove(model.isXTurn());
             boolean validityOfSquare = model.makeMark(move.getRow(), move.getCol());
+            model.getState();
 
-            if (!validityOfSquare)
+
+            if (validityOfSquare == false)
             {
                 do
                     {
@@ -63,6 +65,7 @@ public class TicTacToeController {
                         view.showBoard(model.toString());
                         move = view.getNextMove(model.isXTurn());
                         validityOfSquare = model.makeMark(move.getRow(), move.getCol());
+                        model.getState();
                     }
                 while (!validityOfSquare);
 

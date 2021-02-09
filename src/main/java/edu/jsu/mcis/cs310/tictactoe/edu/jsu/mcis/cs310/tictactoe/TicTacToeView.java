@@ -43,18 +43,19 @@ public class TicTacToeView {
         TicTacToeMove playerMove;
         Scanner playerInput = new Scanner(System.in);
 
-        if (isXTurn == true)
+        if (isXTurn)
         {
             System.out.println("Player 1 (X) Move:\n Enter the row and column numbers, separated by a space: ");
             String theMove = playerInput.nextLine();
-            String[] parts = theMove.split(" ");
-            playerMove = new TicTacToeMove(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+            String[] parts = theMove.split("\\s+");
+            playerMove =  new TicTacToeMove(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+            //System.out.println(parts[0] + parts[1]);
         }
         else
         {
             System.out.println("Player 2 (O) Move:\n Enter the row and column numbers, separated by a space: ");
             String theMove = playerInput.nextLine();
-            String[] parts = theMove.split(" ");
+            String[] parts = theMove.split("\\s+");
             playerMove = new TicTacToeMove(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
 
         }

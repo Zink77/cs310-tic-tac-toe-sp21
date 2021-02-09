@@ -56,8 +56,10 @@ public class TicTacToeModel {
 
         for (int i = 0; i < dimension; i++)
         {
-            board[i][i] = TicTacToeSquare.EMPTY;
-
+            for (int j = 0; j < dimension; j++)
+            {
+                board[i][j] = TicTacToeSquare.EMPTY;
+            }
         }
         
     }
@@ -79,19 +81,25 @@ public class TicTacToeModel {
         
         // INSERT YOUR CODE HERE
 
-        boolean isTheSquareOnTheBoard;
-        boolean isTheSquareAlreadyMarked;
-        boolean canIMark = false;
 
-        isTheSquareAlreadyMarked = isSquareMarked(row,col);
-        isTheSquareOnTheBoard = isValidSquare(row,col);
-
-        if ((!isTheSquareAlreadyMarked) && (isTheSquareOnTheBoard))
+        //isSquareMarked(row,col);
+        if (isValidSquare(row,col) == true)
+        {
+            if (isSquareMarked(row,col) == false)
+            {
+                if (xTurn)
                 {
-                    canIMark = true;
+                    board[row][col] = TicTacToeSquare.X;
                 }
-        
-        return canIMark; // this is a stub; you may need to remove it later!
+                else
+                {
+                    board[row][col] = TicTacToeSquare.O;
+                }
+                xTurn =!xTurn;
+                return true;
+            }
+        }
+        return false; // this is a stub; you may need to remove it later!
         
     }
     
@@ -107,17 +115,17 @@ public class TicTacToeModel {
     private boolean isValidSquare(int row, int col) {
         
         // INSERT YOUR CODE HERE
-        boolean squareOnBoard = false;
 
-        if ((row >= 0) && (row <= dimension))
+
+        if ((row >= 0) && (row <= dimension - 1))
         {
-            if ((col >= 0) && (col <= dimension))
+            if ((col >= 0) && (col <= dimension - 1))
             {
-                squareOnBoard = true;
+                return true;
             }
         }
         
-        return squareOnBoard; // this is a stub; you may need to remove it later!
+        return false; // this is a stub; you may need to remove it later!
         
     }
     
@@ -133,14 +141,13 @@ public class TicTacToeModel {
                 
         // INSERT YOUR CODE HERE
 
-        boolean marked = true;
 
         if (getSquare(row,col) == TicTacToeSquare.EMPTY )
         {
-            marked = false;
+            return false;
         }
         
-        return marked; // this is a stub; you may need to remove it later!
+        return true; // this is a stub; you may need to remove it later!
             
     }
     
@@ -185,16 +192,21 @@ public class TicTacToeModel {
     public TicTacToeState getState() {
         
         // INSERT YOUR CODE HERE
-        TicTacToeState thisState = TicTacToeState.TIE;
+        TicTacToeState thisState = TicTacToeState.NONE;
 
-        if (isMarkWin(TicTacToeSquare.X))
+        if (isMarkWin(TicTacToeSquare.X) == true)
         {
             thisState = TicTacToeState.X;
         }
 
-        else if (isMarkWin(TicTacToeSquare.O))
+        else if (isMarkWin(TicTacToeSquare.O) == true)
         {
             thisState = TicTacToeState.O;
+        }
+
+        else if (isTie() == true)
+        {
+            thisState = TicTacToeState.TIE;
         }
         
         return thisState; // this is a stub; you should remove it later!
@@ -210,14 +222,74 @@ public class TicTacToeModel {
     * @see          TicTacToeSquare
     */
     private boolean isMarkWin(TicTacToeSquare mark) {
-        
-        // INSERT YOUR CODE HERE
-        boolean isWin = false;
 
+        int vertical = 0;
+        int horizontal = 0;
+        int downDiag = 0;
+        int upDiag = 0;
 
-        
-        return false; // this is a stub; you may need to remove it later!
-        
+        for (int i=0; i < dimension; i++)
+        {
+            if (horizontal != dimension)
+            {
+                horizontal = 0;
+
+                for (int j=0; j < dimension; j++)
+                {
+                    if(board[i][j] == mark)
+                    {
+                        horizontal++;
+                    }
+                }
+            }
+        }
+        for (int j=0; j < dimension; j++)
+        {
+            if (vertical != dimension)
+            {
+                vertical = 0;
+                for (int i=0; i < dimension; i++)
+                {
+                    if(board[i][j] == mark)
+                    {
+                        vertical++;
+                    }
+                }
+            }
+        }
+        for (int j = 0; j <dimension;j++)
+        {
+            if(board[j][j] == mark)
+            {
+                downDiag++;
+            }
+        }
+        for (int j = 0; j < dimension;j++)
+        {
+            if(board[j][dimension-j-1] == mark)
+            {
+                upDiag++;
+            }
+        }
+        if (vertical == dimension)
+        {
+            return true;
+        }
+        else if (horizontal == dimension)
+        {
+            return true;
+        }
+        else if (downDiag == dimension)
+        {
+            return true;
+        }
+        else if (upDiag == dimension)
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     
     /**
@@ -229,8 +301,19 @@ public class TicTacToeModel {
     private boolean isTie() {
         
         // INSERT YOUR CODE HERE
+
+        for (int i = 0; i < dimension; i++)
+        {
+            for (int j = 0; j < dimension; j++)
+            {
+                 if (board[i][j] == TicTacToeSquare.EMPTY)
+                 {
+                     return false;
+                 }
+            }
+        }
         
-        return false; // this is a stub; you may need to remove it later!
+        return true; // this is a stub; you may need to remove it later!
         
     }
 
@@ -282,14 +365,34 @@ public class TicTacToeModel {
     * @see         StringBuilder
     */
     @Override
-    public String toString() {
-        
+    public String toString()
+    {
+
         StringBuilder output = new StringBuilder();
-        
+
         // INSERT YOUR CODE HERE
-        
+
+        output.append(" ");
+        for (int i = 0; i <= dimension - 1; i++)
+        {
+            output.append(i);
+        }
+
+        output.append("\n");
+
+        for (int i = 0; i < dimension; i++)
+        {
+            output.append(i);
+            for (int j = 0; j < dimension; j++)
+            {
+                output.append(board[i][j]);
+            }
+            output.append("\n");
+        }
+
+
         return output.toString();
-        
     }
-    
+        
 }
+    
