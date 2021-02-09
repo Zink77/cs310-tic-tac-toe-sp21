@@ -43,7 +43,7 @@ public class TicTacToeController {
 
     public void start() {
     
-        /* MAIN LOOP (repeats until game is over) */
+        /* MAIN LOOP (repeats until game is over) */  
 
         // INSERT YOUR CODE HERE
 
