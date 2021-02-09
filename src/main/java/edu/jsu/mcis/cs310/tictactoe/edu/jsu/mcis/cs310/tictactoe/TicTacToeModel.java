@@ -372,17 +372,17 @@ public class TicTacToeModel {
 
         // INSERT YOUR CODE HERE
 
-        output.append(" ");
+        output.append("  ");
         for (int i = 0; i <= dimension - 1; i++)
         {
             output.append(i);
         }
 
-        output.append("\n");
+        output.append(" \n");
 
         for (int i = 0; i < dimension; i++)
         {
-            output.append(i);
+            output.append(i + " ");
             for (int j = 0; j < dimension; j++)
             {
                 output.append(board[i][j]);
